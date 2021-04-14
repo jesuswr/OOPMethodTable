@@ -13,7 +13,8 @@ tests = TestList [
             test3,
             test4,
             test5,
-            test6
+            test6,
+            test7
         ]
 
 
@@ -46,6 +47,9 @@ test3 =
 -- No describir una clase que no existe
 test4 =
     TestCase (assertEqual "ERROR TEST 4" Nothing (describe basicTable "B"))
+-- No pueden haber metodos duplicados
+test7 =
+    TestCase (assertEqual "ERROR TEST 7" Nothing (addClass basicTable "B" ["a", "a"]))
 
 
 -- Ahora otras pruebas

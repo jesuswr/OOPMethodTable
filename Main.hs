@@ -6,10 +6,12 @@ import qualified Data.Map as Map
 import qualified Data.List as List
 import MethodTable
 
+-- Main function
 main :: IO()
 main = do
     runMainLoop Map.empty
 
+-- Function to interact with the user
 runMainLoop :: ClassTable -> IO()
 runMainLoop classTable = do
     putStrLn "\nQUE DESA HACER?"

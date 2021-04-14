@@ -3,14 +3,15 @@ module MethodTable where
 import qualified Data.Map as Map
 import qualified Data.List as List
 
+-- Types to manage the classes and methods
 type MethodTable = Map.Map String String
-
 type ClassTable = Map.Map String MethodTable
 
 
+-- Function to add a Class, if the name already exists returns Nothing
 addClass :: ClassTable -> String -> [String] -> Maybe ClassTable
 addClass classTable name fs = 
-    case Map.member name classTable of
+    case (Map.member name classTable) || (hasDuplicates fs) of
         True ->
             Nothing
         False -> 
@@ -20,7 +21,7 @@ addClass classTable name fs =
 
 addSubclass :: ClassTable -> String -> String -> [String] -> Maybe ClassTable
 addSubclass classTable name superName fs = 
-    case (Map.member name classTable) || (not $ Map.member superName classTable) of
+    case (Map.member name classTable) || (not $ Map.member superName classTable) || (hasDuplicates fs) of
         True ->
             Nothing
         False ->
@@ -43,3 +44,6 @@ describe classTable name =
             Just $ map (\(x,y) -> x ++ " -> " ++ y ++ " :: " ++ x) methodTable
     where
         methodTable = Map.toList $ classTable Map.! name
+
+hasDuplicates :: (Ord a) => [a] -> Bool
+hasDuplicates xs = length (List.nub xs) /= length xs
