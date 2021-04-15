@@ -14,7 +14,10 @@ tests = TestList [
             test4,
             test5,
             test6,
-            test7
+            test7,
+            test8,
+            test9,
+            test10
         ]
 
 
@@ -32,6 +35,14 @@ basicTable3 :: ClassTable
 basicTable3 = table
     where
         Just table = addSubclass basicTable "SubA" "A" ["g", "h"]
+basicTable4 :: ClassTable
+basicTable4 = table
+    where
+        Just table = addSubclass basicTable "SubA" "A" []
+basicTable5 :: ClassTable
+basicTable5 = table
+    where
+        Just table = addSubclass basicTable3 "SubSubA" "SubA" ["h", "i"]
 
 
 -- Primero algunas pruebas de errores
@@ -59,3 +70,12 @@ test5 =
 -- SubA deberia tener A::f, SubA::g y SubA::h
 test6 =
     TestCase (assertEqual "ERROR TEST 6" (Just ["f -> A :: f", "g -> SubA :: g", "h -> SubA :: h"]) (describe basicTable3 "SubA"))
+-- SubA deberia heredar todo lo de A
+test8 =
+    TestCase (assertEqual "ERROR TEST 8" (Just ["f -> A :: f", "g -> A :: g"]) (describe basicTable4 "SubA"))
+-- A deberia mantener sus metodos
+test9 =
+    TestCase (assertEqual "ERROR TEST 8" (Just ["f -> A :: f", "g -> A :: g"]) (describe basicTable3 "A"))
+-- SubSubA deberia tener A::f, SubA::g, SubSubA::h y SubSubA::i
+test10 =
+    TestCase (assertEqual "ERROR TEST 10" (Just ["f -> A :: f", "g -> SubA :: g", "h -> SubSubA :: h", "i -> SubSubA :: i"]) (describe basicTable5 "SubSubA"))
